@@ -1,8 +1,6 @@
 package io.zipcoder;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 public class Classroom {
     private Student[] students;
@@ -24,7 +22,6 @@ public class Classroom {
     }
 
     public Double getAverageExamScore() {
-
         double sum = 0.0;
         for (Student student : students) {
             sum += student.getAverageExamScore();
@@ -55,8 +52,38 @@ public class Classroom {
     }
 
     public Student[] getStudentByScore() {
-        ArrayList<Student> lst = new ArrayList<Student>(Arrays.asList(this.students));
-        Comparator<Student> compScore = new Comparator<Student>;
+        Comparator<Student> sortByGrade = Comparator.comparing(Student::getAverageExamScore).thenComparing(Student::getFirstName);
+        List<Student> studentsSorted = new ArrayList<>(Arrays.asList(this.students));
+        Collections.sort(studentsSorted, sortByGrade);
+
+        Student[] studentsByScore = new Student[studentsSorted.size()];
+        studentsByScore = studentsSorted.toArray(studentsByScore);
+
+        return studentsByScore;
+    }
+
+    public HashMap getGradeBook() {
+        Student[] studentsByScore = this.getStudentByScore();
+        HashMap<Student, String> gradeBook = new HashMap<Student, String>();
+
+        double percentile = 0;
+        for (int i = 0; i < studentsByScore.length; i++) {
+                percentile = (double) (1 - ( (i + 1) / studentsByScore.length )) * 100;
+                if (percentile < 10) {
+                    gradeBook.put(studentsByScore[i], "A");
+                } else if (percentile < 29) {
+                    gradeBook.put(studentsByScore[i], "B");
+                } else if (percentile < 50) {
+                    gradeBook.put(studentsByScore[i], "C");
+                } else if (percentile < 89) {
+                    gradeBook.put(studentsByScore[i], "D");
+                } else {
+                    gradeBook.put(studentsByScore[i], "F");
+                }
+        }
+
+        return gradeBook;
 
     }
+
 }

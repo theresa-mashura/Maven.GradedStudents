@@ -2,7 +2,10 @@ package io.zipcoder;
 
 import org.junit.Test;
 
-import java.util.Arrays;
+import java.util.*;
+
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 public class ClassroomTest {
 
@@ -59,10 +62,10 @@ public class ClassroomTest {
         Student student = new Student("Leon", "Hunter", examScores);
 
         Double[] examScores2 = { 100.0, 150.0, 250.0, 0.0 };
-        Student student2 = new Student("Andrew", "Bates", examScores);
+        Student student2 = new Student("Andrew", "Bates", examScores2);
 
         Double[] examScores3 = { 100.0, 150.0, 250.0, 0.0 };
-        Student student3 = new Student("Ryan", "Hunter", examScores);
+        Student student3 = new Student("Ryan", "Hunter", examScores3);
 
         // When
         classroom.addStudent(student);
@@ -77,5 +80,67 @@ public class ClassroomTest {
         // Then
         System.out.println("===========================");
         System.out.println(postEnrollmentAsString);
+    }
+
+    @Test
+    public void testGetStudentByScore() {
+        // Given
+        int maxNumberOfStudents = 4;
+        Classroom classroom = new Classroom(maxNumberOfStudents);
+        Double[] examScores = { 100.0, 20.0, 250.0, 0.0 };
+        Student student = new Student("Leon", "Pettigrew", examScores);
+
+        Double[] examScores2 = { 100.0, 500.0, 250.0, 0.0 };
+        Student student2 = new Student("Andrew", "Bates", examScores2);
+
+        Double[] examScores3 = { 100.0, 150.0, 250.0, 0.0 };
+        Student student3 = new Student("Ryan", "Hunter", examScores3);
+
+        Double[] examScores4 = { 100.0, 150.0, 250.0, 0.0 };
+        Student student4 = new Student("Eric", "Hunter", examScores4);
+
+        // When
+        classroom.addStudent(student);
+        classroom.addStudent(student2);
+        classroom.addStudent(student3);
+        classroom.addStudent(student4);
+
+        Student[] actual = classroom.getStudentByScore();
+
+        // Then
+        System.out.println(Arrays.toString(actual));
+    }
+
+    @Test
+    public void testGetGradeBook() {
+        // Given
+        int maxNumberOfStudents = 4;
+        Classroom classroom = new Classroom(maxNumberOfStudents);
+        Double[] examScores = {100.0, 20.0, 250.0, 0.0};
+        Student student = new Student("Leon", "Pettigrew", examScores);
+
+        Double[] examScores2 = {100.0, 500.0, 250.0, 0.0};
+        Student student2 = new Student("Andrew", "Bates", examScores2);
+
+        Double[] examScores3 = {100.0, 150.0, 250.0, 0.0};
+        Student student3 = new Student("Ryan", "Hunter", examScores3);
+
+        Double[] examScores4 = {100.0, 150.0, 250.0, 0.0};
+        Student student4 = new Student("Eric", "Hunter", examScores4);
+
+        // When
+        classroom.addStudent(student);
+        classroom.addStudent(student2);
+        classroom.addStudent(student3);
+        classroom.addStudent(student4);
+
+        HashMap<Student, String> actual = classroom.getGradeBook();
+
+        // Then
+        Set<Map.Entry<Student, String>> entries = actual.entrySet();
+
+        for (Map.Entry<Student, String> entry: entries) {
+            System.out.println(entry.getKey() + "=>" + entry.getValue());
+        }
     }
 }
